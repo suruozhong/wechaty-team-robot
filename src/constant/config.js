@@ -1,4 +1,4 @@
 module.exports = {
-    token: 'puppet_padplus_4557e53a402c82fe',
+    token: '你的token',
     name: '团团'
 }
