@@ -3,9 +3,8 @@ const { Wechaty } = require('wechaty')
 const { ScanStatus } = require('wechaty-puppet')
 const { PuppetPadplus } = require('wechaty-puppet-padplus')
 const QrcodeTerminal = require('qrcode-terminal')
-
 const config = require('./constant/config')
-const message = require('./event/message')
+const {onMessage,taskSendMessage} = require('./event/message')
 const friendship = require('./event/friendship')
 const room = require('./event/room')
 
@@ -21,7 +20,7 @@ const bot = new Wechaty({
 //目前先用轮询，查询是否有要发的消息
 const sendTimeMsg = setInterval(() => {
   if(isLogin){
-    send()
+    taskSendMessage(bot)
   }
 }, 5000);  
 
@@ -42,15 +41,7 @@ bot
     clearInterval(sendTimeMsg)
     console.log("机器人退出登录",user)
   })
-  .on('message', message(bot)) //消息处理
+  .on('message', onMessage(bot)) //消息处理
   .on("friendship", friendship) // 好友添加
   .on("room-join", room) // 加入群聊
   .start()
-
-async function send(){
-  const contact = await bot.Contact.find({name: '苏若中'})
-  console.log("查询结果",contact)
-  if(contact!=null){
-    await contact.say('welcome to wechaty!')
-  }
-}

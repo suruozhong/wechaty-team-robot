@@ -1,15 +1,12 @@
-const config = require('./constant/config')
-export default {
-	get : req => {
-	  //default is get
-	  return createRequest(req);
-	},
+const config = require('../constant/config')
+// node-request请求模块包
+const request = require("request")
+const urlencode = require("urlencode")
 
-	post : req => {
-	  return createRequest(Object.assign({ method: 'POST' }, req));
-	}
-	
+exports.get = function(req){
+	return createRequest(req);
 }
+
 const getUrl = (api, paras) => {
 
   paras = Object.assign({
@@ -23,61 +20,34 @@ const getUrl = (api, paras) => {
   var url = config.host + api + "?"
   var arr = Object.keys(paras);
   for (var i in arr) {
-	url = url + (arr[i] + "=" + paras[arr[i]]) + "&";
+	url = url + (arr[i] + "=" + urlencode(paras[arr[i]])) + "&";
   }
 
   //remove last '&'
   return url.substring(0, url.length - 1);
 }
-// req{
-// 	  api,
-// 	  paras,
-// 	  method,
-// 	  header,
-// 	  data,
-// 	}
+
 const createRequest = (req) => {
 		var method;
 		var url;
-		var header = { "creator": config.creator,  "accessToken" : store.state.accessToken};
+		var header = { "creator": config.creator};
 		if(req.method == null){
-			method = "GET"
-			url = getUrl(req.api, req.paras);
+			//"GET"
+			url = getUrl(req.api, req.data);
+			console.log("请求的地址",url)
+			return new Promise((resolve, reject) => {
+				request(url,function(error,response,body){
+					if (!error && response.statusCode == 200) {
+						resolve(JSON.parse(body));// 请求成功的处理逻辑
+					}else{
+						reject(body);
+					}
+				});
+			});	
 		}else{
-			method = req.method
+			//POST
 			url = config.host + req.api;
-			header = Object.assign({'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'},header)
-		}
-		if(req.header){
-			header = Object.assign({}, header, req.header)
-		}
-	  var realRequest = {
-		url: url,
-		method: (req.method == null ? 'GET' : req.method),
-		header: header,
-		data: req.paras,
-	  }
 
-	  const p = new Promise((resolve, reject) => {
-		uni.request(Object.assign({
-		  success: function (res) {
-			// 请求成功
-			if (res.data.success) {
-			  resolve(res.data);
-			} else {
-			  reject(res.data);
-			}
-		  },
-		  error: function (e) {
-			reject({
-			  code: 99,
-			  message: '网络错误'
-			});
-		  }
-		}, realRequest))
-	  });
-
-	  return {
-		send: () => p
-	  }
+			
+		}
 	}
