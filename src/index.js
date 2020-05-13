@@ -7,6 +7,7 @@ const config = require('./constant/config')
 const {onMessage,taskSendMessage} = require('./event/message')
 const friendship = require('./event/friendship')
 const room = require('./event/room')
+const roomInvitation = require('./event/roomInvitation')
 
 var isLogin = false;  //是否登录标记
 
@@ -22,7 +23,7 @@ const sendTimeMsg = setInterval(() => {
   if(isLogin){
     taskSendMessage(bot)
   }
-}, 5000);  
+}, 60000);  
 
 bot
   .on('scan', (qrcode, status) => { //扫码登录
@@ -44,4 +45,5 @@ bot
   .on('message', onMessage(bot)) //消息处理
   .on("friendship", friendship) // 好友添加
   .on("room-join", room) // 加入群聊
+  .on("room-invite", roomInvitation) // 入群邀请
   .start()

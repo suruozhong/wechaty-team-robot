@@ -1,6 +1,7 @@
 const config = require('../constant/config')
 // node-request请求模块包
 const request = require("request")
+//参数编码
 const urlencode = require("urlencode")
 
 exports.get = function(req){
@@ -34,10 +35,12 @@ const createRequest = (req) => {
 		if(req.method == null){
 			//"GET"
 			url = getUrl(req.api, req.data);
-			console.log("请求的地址",url)
 			return new Promise((resolve, reject) => {
 				request(url,function(error,response,body){
 					if (!error && response.statusCode == 200) {
+						if(!body){
+							body="{}"
+						}
 						resolve(JSON.parse(body));// 请求成功的处理逻辑
 					}else{
 						reject(body);
