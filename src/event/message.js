@@ -22,8 +22,10 @@ exports.onMessage = bot => {
                 //群消息
                 //调用接口处理消息
                 var ret = await api.handle({msg: text,wxId: room.id,wxName: contact.payload.name,type: 2})
-                //回复消息
-                await room.say(ret.data)
+                if(ret.data){
+                    //回复消息
+                    await room.say(ret.data)
+                }
             }
         }else{
             console.log("非文本消息不做处理")
