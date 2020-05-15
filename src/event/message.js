@@ -37,7 +37,7 @@ exports.onMessage = bot => {
 exports.taskSendMessage = async function(bot){
     var ret = await api.list()
     var list = ret.data
-    if(list.length>0){
+    if(list && list.length>0){
         for (let i = 0; i < list.length; i++) {
             const vo = list[i];
             if(vo.type === 1){  //type=1私聊，2群聊
@@ -56,7 +56,8 @@ exports.taskSendMessage = async function(bot){
                     
                     var atList = []
                     for(var y=0; y<names.length; y++){
-                        const roomContact = await room.member({name: names[y]})
+                        console.log(names[y])
+                        let roomContact = await room.member({name: names[y]})
                         if(roomContact!=null){
                             atList.push(roomContact)
                         }else{
