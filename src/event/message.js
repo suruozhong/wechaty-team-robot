@@ -56,7 +56,6 @@ exports.taskSendMessage = async function(bot){
                     
                     var atList = []
                     for(var y=0; y<names.length; y++){
-                        console.log(names[y])
                         let roomContact = await room.member({name: names[y]})
                         if(roomContact!=null){
                             atList.push(roomContact)
