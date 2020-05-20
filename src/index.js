@@ -18,7 +18,7 @@ const bot = new Wechaty({
   name: config.name, // generate xxxx.memory-card.json and save login data for the next login
 })
 
-//目前先用轮询，查询是否有要发的消息
+//先用轮询，查询是否有要发的消息
 const sendTimeMsg = setInterval(() => {
   if(isLogin){
     taskSendMessage(bot)
