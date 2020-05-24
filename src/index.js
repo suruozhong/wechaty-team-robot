@@ -5,7 +5,7 @@ const { PuppetPadplus } = require('wechaty-puppet-padplus')
 const QrcodeTerminal = require('qrcode-terminal')
 const config = require('./constant/config')
 const {onMessage,taskSendMessage} = require('./event/message')
-const friendship = require('./event/friendship')
+const {onFriendShip} = require('./event/friendship')
 const room = require('./event/room')
 const roomInvitation = require('./event/roomInvitation')
 
@@ -18,7 +18,7 @@ const bot = new Wechaty({
   name: config.name, // generate xxxx.memory-card.json and save login data for the next login
 })
 
-//目前先用轮询，查询是否有要发的消息
+//先用轮询，查询是否有要发的消息
 const sendTimeMsg = setInterval(() => {
   if(isLogin){
     taskSendMessage(bot)
@@ -43,7 +43,7 @@ bot
     console.log("机器人退出登录",user)
   })
   .on('message', onMessage(bot)) //消息处理
-  .on("friendship", friendship) // 好友添加
+  .on("friendship", onFriendShip(bot)) // 好友添加
   .on("room-join", room) // 加入群聊
   .on("room-invite", roomInvitation) // 入群邀请
   .start()
