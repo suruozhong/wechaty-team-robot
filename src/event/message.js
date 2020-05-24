@@ -43,6 +43,7 @@ exports.taskSendMessage = async function(bot){
             if(vo.type === 1){  //type=1私聊，2群聊
                 const contact = await bot.Contact.find({id: vo.wxId})
                 if(contact!=null){
+                    console.log("回复",vo.msg)
                     await contact.say(vo.msg)
                     await api.setSend({id: vo.id,status: 1})  //设置该任务已发送,status=1为已执行
                 }else{
