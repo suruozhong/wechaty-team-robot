@@ -2,6 +2,6 @@
 module.exports = {
     // host: 'http://localhost:8900/zhong/front',
     host: 'https://lawyer.newmonth.cn/zhong/front',
-    token: '你的token',
+    token: 'token',
     name: '小助手'
 }
